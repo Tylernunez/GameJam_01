@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour {
     public float speed = 6.0F;
     public bool sprint = false;
     public Collider other;
+    public string playerNumber;
 
     void Start()
     {
@@ -14,16 +15,27 @@ public class PlayerController : MonoBehaviour {
     }
     void Update()
     {
-        float verticalMovement = Input.GetAxis("Vertical") * speed;
-        float horizontalMovement = Input.GetAxis("Horizontal") * speed;
-        verticalMovement *= Time.deltaTime;
-        horizontalMovement *= Time.deltaTime;
+        float verticalMovement = Input.GetAxis("Vertical" + playerNumber) * speed;
+        float horizontalMovement = Input.GetAxis("Horizontal" + playerNumber) * speed;
+        //transform.Translate(horizontalMovement, 0, verticalMovement);
+        Vector3 movement = new Vector3(horizontalMovement,0,verticalMovement);
+        transform.Translate(movement * speed * Time.deltaTime);
+        //if (movement.magnitude > 0.05f)
+        //{
+        //    transform.LookAt(transform.position + movement);
+        //}
 
-        float angleH = Input.GetAxis("RightH") * 10;
-        transform.localEulerAngles = new Vector3(0, angleH, 0);
+        //ROTATION
+        /*float xLook = Input.GetAxis("RightStickX");
+        float yLook = Input.GetAxis("RightStickY");
 
-        transform.Translate(horizontalMovement, 0, verticalMovement);
+        float heading = Mathf.Atan2(xLook, yLook);
+        GetComponent<Transform>().eulerAngles = new Vector3(0, heading*Mathf.Rad2Deg, 0);
+        Quaternion eulerRot = Quaternion.Euler(0.0f, heading*Mathf.Rad2Deg, 0.0f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, eulerRot, Time.deltaTime * 100);
+        */
 
+        //Lock the cursor
         if (Input.GetKeyDown("escape"))
         {
             Cursor.lockState = CursorLockMode.None;
